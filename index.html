@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizz Formation Power BI : Saint-Christophe Assurances</title>
+<style>
+  :root{
+    --msc-orange:#E9530E;
+    --msc-orange-dark:#C2410C;
+    --power-bi-yellow:#f2c811;
+    --power-bi-dark-yellow:#735c00;
+    --navy:#1F3864;
+    --blue:#2E5395;
+    --page-background:#f6f8fa;
+    --card-background:#ffffff;
+    --text-color:#252423;
+    --secondary-text:#57606a;
+    --border-color:#d0d7de;
+    --link-blue:#0969da;
+    --success:#1a7f37;
+    --success-background:#dafbe1;
+    --error:#cf222e;
+    --error-background:#ffebe9;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--text-color);
+    background:var(--page-background);
+  }
+  .hidden{display:none !important;}
+
+  /* ============ LANDING ============ */
+  #landing{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 18px 60px;
+    position:relative;
+    overflow:hidden;
+    background:
+      linear-gradient(135deg, rgba(31,56,100,0.94) 0%, rgba(46,83,149,0.90) 48%, rgba(233,83,14,0.86) 100%),
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 45%),
+      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08), transparent 45%),
+      #1F3864;
+  }
+  #landing::before,#landing::after{
+    content:"";position:absolute;border-radius:50%;
+    background:rgba(255,255,255,0.05);
+  }
+  #landing::before{width:520px;height:520px;top:-160px;right:-120px;}
+  #landing::after{width:360px;height:360px;bottom:-140px;left:-100px;}
+
+  .landing-inner{position:relative;z-index:2;width:100%;max-width:1000px;text-align:center;}
+
+  .brand{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:104px;height:104px;margin:0 auto 22px;
+    background:#ffffff;border-radius:20px;
+    box-shadow:0 12px 34px rgba(0,0,0,0.28);
+    overflow:hidden;
+  }
+  .brand img{width:100%;height:100%;object-fit:cover;display:block;}
+
+  .landing-kicker{
+    margin:0 0 10px;color:#CADCFC;font-size:0.95rem;font-weight:bold;
+    letter-spacing:3px;text-transform:uppercase;
+  }
+  #landing h1{
+    margin:0 0 14px;color:#ffffff;line-height:1.15;
+    font-size:clamp(1.9rem,5vw,3.1rem);
+    text-shadow:0 2px 18px rgba(0,0,0,0.25);
+  }
+  .landing-sub{
+    margin:0 auto 8px;max-width:640px;color:#e8eefc;
+    font-size:clamp(1rem,2.4vw,1.2rem);line-height:1.6;
+  }
+  .landing-author{
+    margin:0 auto 40px;color:#CADCFC;font-size:0.98rem;font-weight:bold;
+  }
+  .landing-author span{font-weight:normal;color:#cdd8ee;}
+
+  .day-grid{
+    display:grid;gap:22px;
+    grid-template-columns:repeat(3,1fr);
+    max-width:960px;margin:0 auto;
+  }
+  @media(max-width:760px){.day-grid{grid-template-columns:1fr;max-width:420px;}}
+
+  .day-card{
+    display:flex;flex-direction:column;
+    background:rgba(255,255,255,0.97);
+    border-radius:16px;padding:26px 22px 24px;
+    text-align:left;cursor:pointer;
+    border:0;font-family:inherit;
+    box-shadow:0 10px 30px rgba(0,0,0,0.22);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .day-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.30);}
+  .day-card:focus-visible{outline:4px solid var(--power-bi-yellow);outline-offset:3px;}
+
+  .day-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:52px;height:52px;margin-bottom:16px;
+    background:var(--navy);color:#fff;border-radius:13px;
+    font-size:1.5rem;font-weight:bold;
+  }
+  .day-card:nth-child(2) .day-badge{background:var(--blue);}
+  .day-card:nth-child(3) .day-badge{background:var(--msc-orange);}
+
+  .day-card h2{margin:0 0 4px;font-size:1.28rem;color:var(--navy);}
+  .day-level{
+    margin:0 0 12px;font-size:0.82rem;font-weight:bold;
+    letter-spacing:1px;text-transform:uppercase;color:var(--msc-orange-dark);
+  }
+  .day-theme{margin:0 0 18px;font-size:0.95rem;line-height:1.5;color:var(--secondary-text);flex:1;}
+  .day-go{
+    display:inline-flex;align-items:center;gap:8px;
+    align-self:flex-start;
+    padding:10px 18px;border-radius:8px;
+    background:var(--navy);color:#fff;font-weight:bold;font-size:0.95rem;
+  }
+  .day-card:hover .day-go{background:var(--msc-orange);}
+
+  .landing-foot{
+    position:relative;z-index:2;margin-top:44px;
+    color:#c6d2ea;font-size:0.82rem;text-align:center;
+  }
+
+  /* ============ QUIZ ============ */
+  #quiz-view{padding:0 0 60px;}
+  .quiz-topbar{
+    background:var(--navy);color:#fff;
+    padding:14px 20px;display:flex;align-items:center;gap:16px;
+    flex-wrap:wrap;
+  }
+  .quiz-topbar .tb-logo{
+    width:42px;height:42px;border-radius:9px;background:#fff;overflow:hidden;flex:0 0 auto;
+  }
+  .quiz-topbar .tb-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .quiz-topbar .tb-text{flex:1;min-width:180px;}
+  .quiz-topbar .tb-text strong{display:block;font-size:1.05rem;}
+  .quiz-topbar .tb-text span{font-size:0.82rem;color:#CADCFC;}
+  .back-button{
+    padding:9px 16px;border:0;border-radius:8px;cursor:pointer;
+    background:var(--msc-orange);color:#fff;font-family:inherit;
+    font-size:0.9rem;font-weight:bold;
+  }
+  .back-button:hover{background:var(--msc-orange-dark);}
+  .back-button:focus-visible{outline:3px solid var(--power-bi-yellow);outline-offset:2px;}
+
+  header.quiz-head{max-width:900px;margin:30px auto 24px;text-align:center;padding:0 15px;}
+  header.quiz-head h1{margin:0 0 10px;color:var(--power-bi-dark-yellow);font-size:clamp(1.5rem,4.5vw,2.2rem);}
+  .instructions{max-width:700px;margin:0 auto;color:var(--secondary-text);font-size:1rem;line-height:1.6;}
+
+  .score-container{
+    position:sticky;top:0;z-index:10;max-width:900px;
+    margin:0 auto 25px;padding:14px 20px;background:#252423;
+    border-radius:0 0 10px 10px;color:#fff;font-weight:bold;text-align:center;
+    box-shadow:0 4px 14px rgba(31,35,40,0.18);
+  }
+  .quiz-container{width:100%;max-width:900px;margin:0 auto;padding:0 15px;}
+
+  .card{
+    width:100%;margin-bottom:28px;padding:22px;background:var(--card-background);
+    border:1px solid var(--border-color);border-top:5px solid var(--power-bi-yellow);
+    border-radius:12px;box-shadow:0 4px 14px rgba(31,35,40,0.08);
+  }
+  .card.correct-card{border-color:var(--success);border-top-color:var(--success);}
+  .card.incorrect-card{border-color:var(--error);border-top-color:var(--error);}
+  .question-number{margin-bottom:8px;color:var(--power-bi-dark-yellow);font-size:0.9rem;font-weight:bold;text-transform:uppercase;}
+  .question{margin:0 0 18px;font-size:1.08rem;font-weight:bold;line-height:1.5;}
+  .propositions{display:grid;gap:10px;margin:0 0 18px;padding:0;border:0;}
+  .proposition{
+    display:flex;align-items:flex-start;gap:12px;width:100%;padding:13px 15px;
+    background:#fff;border:1px solid #d0d7de;border-radius:8px;cursor:pointer;
+    transition:background-color .2s ease,border-color .2s ease,transform .2s ease;
+  }
+  .proposition:hover{background:#fffbea;border-color:#b99a00;transform:translateY(-1px);}
+  .proposition:has(input:checked){background:#fff8d6;border-color:#b99a00;box-shadow:0 0 0 2px rgba(242,200,17,0.25);}
+  .proposition:has(input:focus-visible){outline:3px solid var(--link-blue);outline-offset:2px;}
+  .proposition input{flex:0 0 auto;width:19px;height:19px;margin:1px 0 0;accent-color:#8a7000;cursor:pointer;}
+  .proposition-text{flex:1;font-size:0.98rem;line-height:1.4;}
+  .proposition-letter{font-weight:bold;}
+  .scratch-instruction{margin:0 0 9px;color:var(--secondary-text);font-size:0.9rem;font-weight:bold;text-align:center;}
+  .scratch-container{position:relative;width:100%;height:125px;overflow:hidden;border-radius:9px;}
+  .result{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:15px;border:2px solid #8c959f;border-radius:9px;background:#f6f8fa;text-align:center;}
+  .result.correct{color:#116329;background:var(--success-background);border-color:var(--success);}
+  .result.incorrect{color:#82071e;background:var(--error-background);border-color:var(--error);}
+  .result-title{margin-bottom:7px;font-size:1.15rem;font-weight:bold;}
+  .result-answer{font-size:0.95rem;font-weight:bold;line-height:1.4;}
+  canvas{position:absolute;inset:0;z-index:2;width:100%;height:100%;border-radius:9px;cursor:crosshair;touch-action:none;transition:opacity .6s ease-out;}
+  canvas:focus-visible{outline:4px solid var(--link-blue);outline-offset:-4px;}
+  .status{min-height:22px;margin:10px 0 0;color:var(--secondary-text);font-size:0.88rem;font-weight:bold;text-align:center;}
+  .status.warning{color:#9a6700;}
+  .status.success{color:var(--success);}
+  .status.error{color:var(--error);}
+  .reset-container{max-width:900px;margin:30px auto 0;text-align:center;padding:0 15px;}
+  .reset-button{padding:12px 25px;color:#fff;background:#252423;border:0;border-radius:8px;font-family:inherit;font-size:1rem;font-weight:bold;cursor:pointer;}
+  .reset-button:hover{background:#45423f;}
+  .reset-button:focus-visible{outline:4px solid var(--link-blue);outline-offset:3px;}
+
+  @media(max-width:600px){
+    .card{padding:16px;}
+    .question{font-size:1rem;}
+    .proposition{padding:12px;}
+    .proposition-text{font-size:0.93rem;}
+    .scratch-container{height:145px;}
+    .score-container{padding:12px 15px;font-size:0.9rem;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    canvas,.proposition,.day-card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= LANDING ================= -->
+<section id="landing">
+  <div class="landing-inner">
+    <div class="brand"><img src="data:image/jpeg;base64,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" alt="Logo Saint-Christophe Assurances"></div>
+    <p class="landing-kicker">Saint-Christophe Assurances · Formation</p>
+    <h1>Quizz Formation Power BI</h1>
+    <p class="landing-sub">Trois questionnaires « à gratter » pour valider vos acquis, un par journée de formation.</p>
+    <p class="landing-author">HADDADOU Mahdi Sofiane, <span>Consultant Power BI</span></p>
+
+    <div class="day-grid" id="day-grid"></div>
+  </div>
+  <p class="landing-foot">Sélectionnez une journée pour commencer · Chaque quizz comporte 12 questions · Seuil de réussite : 8 / 12</p>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz-view" class="hidden">
+  <div class="quiz-topbar">
+    <span class="tb-logo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISBhMTEBATEhASFREWGBYTExIVFxERGBUiHRcVFRYYHzQgGh0lJxcYIT0hJSktLi4uGR8zRD8sNystOisBCgoKDg0OGxAQGy8lICU2LS0tKy0rLS0tLy0yKzYtLS0tLS0tLS0tLS0tLS0rLS0tLS0tLy0tLS0tLS0tLS0tLf/AABEIAMgAyAMBEQACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAABQQBAwYC/8QARhAAAQMBBAQNAgIGCAcAAAAAAQACAxEEBRIhBhMxQSIyNTZRYXFzg5GhsrMUgRVSFiNCscLwMzRicnTB0fEkJSZDU6Lh/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAEDBAUCBv/EAC8RAAIBAwIEBgICAwADAAAAAAABAgMEESEzBRITMRQ0QWGBsSJRMnEVI8EkQqH/2gAMAwEAAhEDEQA/ANN98sz97L7yvk7ndZ9pZbETEqDWEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEBd0J50Q+J8blt4dvo53FfLS+Psn33yzP3svvKpud1l1lsRMSoNYQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQF3QnnRD4nxuW3h2+jncV8tL4+yfffLM/ey+8qm53WXWWxExKg1hAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAXdCedEPifG5beHb6OdxXy0vj7J998sz97L7yqbndZdZbETEqDWEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEBd0J50Q+J8blt4dvo53FfLS+Psn33yzP3svvKpud1l1lsRMSoNYQBAEAQBAEAQBAEAQBBoEJYQgIAgCAIAgCAIAgCAu6E86IfE+Ny28O30c7ivlpfH2T775Zn72X3lU3O6y6y2ImJUGsIAgCAIAgCAIAgCAIlkNpdzQbHKI8Rifh6cLqU7VZ0ZL0KfEU28ZM6rehcnlaBAEAQBAEAQBAEAQBAXdCedEPifG5beHb6OdxXy0vj7J998sz97L7yqbndZdZbETEqDWEAQBAEAQBAEAQBMD3PUXJHHZrm+rlYHyOdhiadgI/a9D5da6dvFUqfWa/o411Odet0IvC9TpGmdr1+IuYR+TA2n+vqq/8hUT1LXwmjy6d/wB5PvSGzxS3Yy1wtwY3FsjBSjX9OX85hermEZwVWHyV2VSdKo6E/g80udodjGAgCAIAgCAIAgCAIC7oTzoh8T43Lbw7fRzuK+Wl8fZPvvlmfvZfeVTc7rLrLYiYlQawgCAIAgCAIAgOQM8kSz2IbS7lH8CtOox6h4aBUkimXZtWjwtTGWjL46g5cvMLTeZfckUBZQRueQ+vGqSSKfdTOs3SUMdiKduo15VE859DIbOfohJuL3M+4aD/ABKmVPEUy9VFKbpmpl5EXE6AM4LpA8vrvoODT7K/rvpdMzu2Sr9XPY5luK0tixGB+HqFcuwZrz4WqlnBKvqMnjmJyz4aeGbMprKOEAQBAEAQBAEAQF3QnnRD4nxuW3h2+jncV8tL4+yfffLM/ey+8qm53WXWWxExKg1hAEAQBAEAQBCT1GjTGQXRLbHtD3sOCMHYHGmfr6FdO1jGnSdZ9/Q4t7KVasqEdF6ki1X5aZJCXTyZ1FGuLW06MIyWWd1Um+5thY0YJYid1yxv1mCSCSSB/GDWOJadz25bR6r3bxk5Ya0KrycUsxeJI9a/RAfhTYzIcLZXSEhvCLMNMIH5sgup4FcmGcZcRl1XNLVnj74a8zUED4oWZMaWOFB+Z3S47yuVXi86LCR27SUOXLllvuLJpBaY5g4TPNNz3FzT1UKiF3UjJPJNSwoTWEijpXZ2PscNrjbh14IeBs1g6PIj7K+8jGUVUXqZuH1JQqSoT9Ox5pc464QBAEAQBAEAQF3QnnRD4nxuW3h2+jncV8tL4+yfffLM/ey+8qm53WXWWxExKg1hAEAQBAEAQBAep0bLZ7lmsbnBsjiHxk7C4UNPT1K6drKNSk6L7+hxb2MqNZV1qvUiWi6bRHKQ6GQFudQ0kZbwQsc7ecHqjfC7ozjozbclplM2J9pkjgZQvON2fQxo3uKvt5yzlvQz3lGDWIxzJ9j1r9L2fhbZDG4MdK6LJ3Ca3DXF27F03ex5MvscdcOn1XDOq1PHXxPM2fK0ySRPzY/G6jm9m4jeFyriUs6PKZ2rSlT5dY4a7nRZLltEk4a2F9Tvc1zQOskquna1JSSwW1LyjTWclbSuZkdhgsjHBxhBLyPznd6nzC1Xkoxiqa9DJw+LnUlXku/Y8yuadcIAgCAIAgCAIC7oTzoh8T43Lbw7fRzuK+Wl8fZPvvlmfvZfeVTc7rLrLYiYlQawgCAIAgCAIAgOWuIdUGhGwg5jyUp47HmUU+5U/SO1fTlhncWkUNQ0mnaRVafF1GsNmP8Ax9HmTUTrtN2uZc0UxfVkjngNz4NMif8A1USoyjSU89z1C4jKvKml2MxtJ+hEe4Pc/wA2gD2qpzzBRLlSSqOf7NLLucbidOH8BsgaWZ8ag4XqrejJU+pnQodwvEdLGrO2TSS1uiwmd1NmQa0+bRVS7uq1jIXDrfOUiUTmsuXJ5ZsSSWInCEhAEAQBAEAQBAXdCedEPifG5beHb6OdxXy0vj7J998sz97L7yqbndZdZbETEqDWEAQBAEAQBAEAQBPUlex6m5Sy1XJ9I94ZMxxdETsdWtW+p8+pdOg41qXSb1XY4l0p29frpaPuZG6IWzX4dUAPzF7MPbtr6Kn/AB9XOpofFaCjlM0aQyxwXUyxxOD3NcXyuGzH0fz0BXXM406Sow+SmzhOtWdea/o8yuWdjRBSOwQBAEAQBAEAQBAXdCedEPifG5beHb6OdxXy0vj7J998sz97L7yqbndZdZbETEqDWEXcBQv0PcKdcEJoJpknsgmBkJgY9AmNRoE9wE1Y9zkHNSnjUhpNamo3nOY8Jnlw9GsfTyqrfEVGsN6GdWtHOeXUyKr+RoSSC8vQl6LQKdMDGgQLVhPYJ5CYyHoE7k9wmCAmV2GMBAEBd0J50Q+J8blt4dvo53FfLS+Psn33yzP3svvKpud1l1lsRMSoNYTOGDVdkAkvGNjjRr3taewlW0I81RJlFzUcKLaL+lFsijlkszbJGwNwhrwOENhxVpnXYt93UUc0lE5lhSnLFZz+CfHoxaXWEStYC0tDgA4FxaRWoCzqyquKaNf+Soxnyt//AA4iY79GHnVMLRKBrKjGDQcECmz/AFUqL6OMHhzg7n+Xp2O4aI2rPgNybiHCHC6gisKmch8UoZ7mu6rg1ui8r8LdcX8Al1MLQRiB6NjlfSteag5epRXvXG6il2PLLl4Ozn1PT3TFFZ7gNqlibM978EbX8UdJPkfJdKjGFOk6kllnGup1K9foReEu53XbZm2m6LW6OFjXufHgAA4GYrQ7htKspRjXpy5VqeK0nbVaalLK1yR7Ro/Oy8WQuaMcmbSDwXZZ5rJK0qKah+zfC/pSi6ieiKN03NPDegD4I5HObJRjyKUaQC7Yeqito206csNGS4uqVam2pYJ926Ozz2bWMa0MqQC5wGIjbRVQtKk1zGmd/SpPkb1KUFwYtEzKGt1uMuxF1P1YGY7citKtc2/NjUyO9auuXOhOsWjlolsWtYwYTWgJAL6flCyxs6socyNdTiFKnPlZ1Xfcc08LnRtBDXBpqaEE/wC6iFrUmtEeq17TpNJvuUrnud0WlUMVoY01xHc5rhgd/mFfRt5QrKM0Zrq7jVtXOmzovrR+aMSTYGiLWOyBFWtLuCS3dtCi4tJwzJLQ92t9CWKbep0WbR20SXfrWsGGhIBNHOaNpAVUbOrKHMW1L+jGpyElZuyN2QoAQF3QnnRD4nxuW3h2+jncV8tL4+yfffLM/ey+8qm53WXWWxExKg1hO47nLTR1QaEb+hE3F6ESSl+LPW2iRtu0ddI4UtNlAqacdn8g/cda60v/ACaOfVHCipWlxy/+sjfcF3Q2e94WmSU2l8RcQKavCWngnfu9FooUVSklnVmW6rzrRbx+KJbh/wBHWj/FH+FUNf6W/c0xf/lL+i1M4/p3Bn/2P4XrQ5Prpe3/AAyqK8JN+/8A0kN5p23/ABA97VnyuhPU1rW6pkmJ1i+g4Qn1+E5jBgx7uumxY4dHp69zfNXbq/jjlKFvz0Es1P2ZXg9RJftWiqs2scGWi+W+ln1OLmNNELZTLOPyqEt21bya9hd4d1TT9ytEf+Jur+4/0YFpTzOn8mLGI1kvY6ritDn6cTY3E4de0VOxofQAD7LzSnzXEme68FG0i17GO6MFruUWUuwTxFzojuftJB8/5zVdJxr03T9V2LaylbVVWxmLxk6ywt0Ie12RFooR0EAKMNW3Kycxd4mu2Cja3lt93c1nFEcdPvk70V0m41IRiZ4JOlVb/Ythw3LeIZl+vAy6C5uL95Uz/GnPl9iKWJVKWff6NFmNbXdRPGMctTvIEQovSbbpt99TzJJRrJdtDBZ3Vuy86/8Ak/jKrg+anUz7F01idL+n9FO1yWeG87NJJaDGI4WhsYje4OaQRXE3Lo8lbKVOnKMm8exmpxq1IzhGOcvueCtZabW8s4pe7Du4Nclw6ri55ifTUVJQSZ0rwWhAXdCedEPifG5beHb6OdxXy0vj7J998sz97L7yqbndZdZbETEqDWEYO2yy4LS1xaHBrmnCdjqHYV7pyUXqV1YOceVaFy26QsN3vis9mbBreOQ6tR0DJbJ3keRqCxk5tPh8+opVJ5x2NEGljRLFI6zB07GYC/GRVlNwpkf/AKrFfpYbjqeJcKlrFT0fpgluvf8A5PJBg/pJdZixbNmVKdSod1+HJg0xsf8AaqmfTBsfpNW/o7TquIzBhx7ciK1p/a6F78b/ALVPHYqXDn0ZU+budd3381lkmjkg1kczsdMZGF1ezqCiF3FRaayme6lhKUozhLDRCWFpPU6KX4lm5b81NlfFLEJoXkHCTSjukeQWy3uunFxmso591ZOrNTg8NHLr7b9FaI2QhjZywgB2UYbTLZns9VPilyySWEyPBPnhJyy1k7GaRUfZDqv6q1w439JUAdGWzrU+M1i8djy+H/zzL+R1XbfmqvyS0avFrDIcOKlMbq7aLzC7xVc8HurYudBUubsdt0X5DBC0/Sh1oYHUkxkVrXMt+9F7pXUKa/jr+zxWsatV458R/WD4s9/D8LlhmhEmse6QOxFuGQjbTtzURu/wcZImVg+rGcHjBosGkwZZYxJAJJoARG8uIwgimY30XuF6lDVarseKnDHOb5ZYT7o13NeAbo1anyBshdK0ua40xhxbi2dpzV1GslRlKRmuLduvCEdO+pjm0mrfMMrYqRwNLWR4txaRtplu8lQ73/YpY0Rqjw1qjKLlq/UyRX3Sy2pmr/rJrXFxMyejPaq1d/jJY7lrseaUJZ/iaoNIIzYmMtNmEzohRji7Dwdwd0qyN3BwSqRzgqlYVIzbpTwn6EBxq4mlK7ujsWBvXQ6cY4Wp8qD0EBd0J50Q+J8blt4dvo53FfLS+Psn33yzP3svvKpud1l1lsRMSoNYQBAdkMRfM1reM4gDrJNAvUI88uVHipONOPNI1uuiUEVbSr3RippVw4x/uihzVvh5LuZ1eU32PizXe57mAFrcYcW4jSoBof3HyKiFFvue53CjnHocNsDi5oaWkOc5oIORwgEnsz/eo6LHiY4fscm7n6ljqtrJTC2pxGpoN1PVenReMkK5Tb9jq+mdikGX6sEuNd2INy+5Cr6T1LOrFYX7OxthcbHrCWhvCpWtXU6Muteuk1DmyeeuupypCyWB0jKtLRwg0YjTG4jihI0XIipcRg8MWa73ySta2lX12mmEA0q7oSFGU9IkzuIU/wCRxHYXGyukJa1rSW5mhLgKkDrU9F8pDuYKXKfbrseHtFW4ngGlcw3DiqeqgToS0IV1B5/R8w2Bzmg1a0FhfVxpRuLBU/fJSqEmskSuoJ8qPoXZJrZG0FYgS7PLIVy6TQE06iioTy0S7uEUvc4F2yfTtfTgPEjgeplcVfLLpTozwHc08teq/wCh13PFBVmNxZwMQxDFxclHRkn7jxMX/X7Pv8Kfry0OYSGlzs3Ua0GlTl17lKoNsjxUUuxikbR5GRoaZGoPYVTJYNMZcyPlQSEAQF3QnnRD4nxuW3h2+jncV8tL4+yfffLM/ey+8qm53WXWWxExKg1hAEB22acsmDm0xCtK7jTavUJckso8VIKceVmht6SYmVOLBj41TiDmhpBz6AArfESzqZ3Z08PHqfLrc7XYgGijHMAANGNIINM/7R815lWeco9q3jycrOY7e5tmwBrcg8B1Dia1/GANaZ9m9SqzSwRO2UpZOw3s/HGcLaxYCM5KHCKNqC6m7dRe/EdngrVn3jnudcduoHgRR4X4at/WUyO44q+q89VZbwe3byaX5aoSW9xsIiwjC0UBBkB4xOYxYTmehQ6zcOXBKtkqvUTFmvFzIQ0NZVrnOa4glzXEAVGdP2RtCmNdxIqWqnLmb+DiyXg+Jp1ZAJIJNASabBnurmohWlBfj6nqpbQm8yPv8SdqngNYNZXEQHZgurSlabekVU9fR+548KuZPPY+jerqs4DA1msAbwsJEjaO2uqKjcKdSnxD09jyrSOGm9WIr3lbLiYQw8ADDUUYzY3bs6a7UVy0TKzhJYZxFe8jQQ3DQlxIpXEXVBqTnsNEVxJPJLtIPVnz+JyfTuYCMLmsYRTYG7COvM17So8RJJk+EjlP1R9G83fUNkwR6xpDi6jquIGVeF+6idd55sEeFXK4t6MMvRwtWsDG4sqVMhwkbwS6v2rRT18POA7TMeXJie6ryTtJru/yVEnk1RjhHyoJCAIC7oTzoh8T43Lbw7fRzuK+Wl8fZPvvlmfvZfeVTc7rLrLYiYlQawgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgLuhPOiHxPjctvDt9HO4r5aXx9k+++WZ+9l95VNzusustiJiVBrCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAu6E86IfE+Ny28O30c7ivlpfH2T775Zn72X3lU3O6y6y2ImJUGsIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIC7oTzoh8T43Lbw7fRzuK+Wl8fZPvvlmfvZfeVTc7rLrLYiYlQawgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgLuhPOiHxPjctvDt9HO4r5aXx9k+++WZ+9l95VNzusustiJiVBrCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAu6E86IfE+Ny28O30c7ivlpfH2T775Zn72X3lU3O6y6y2ImJUGsIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIC7oTzoh8T43Lbw7fRzuK+Wl8fZPvvlmfvZfeVTc7rLrLYiYlQawgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgLuhPOiHxPjctvDt9HO4r5aXx9n/9k=" alt="Saint-Christophe"></span>
+    <span class="tb-text">
+      <strong>Formation Power BI</strong>
+      <span>HADDADOU Mahdi Sofiane, Consultant Power BI</span>
+    </span>
+    <button type="button" class="back-button" id="back-button">← Choisir une autre journée</button>
+  </div>
+
+  <header class="quiz-head">
+    <h1 id="quiz-title">Questionnaire</h1>
+    <p class="instructions">
+      Pour chaque question, sélectionnez une seule proposition.
+      Grattez ensuite la zone grise pour vérifier votre réponse.
+      Une réponse validée ne peut plus être modifiée.
+    </p>
+  </header>
+
+  <div class="score-container" aria-live="polite">
+    Score : <span id="score">0</span> bonne réponse sur
+    <span id="answered-count">0</span> question vérifiée
+  </div>
+
+  <main id="quiz" class="quiz-container" aria-label="Questionnaire Power BI"></main>
+
+  <div class="reset-container">
+    <button id="reset-quiz" type="button" class="reset-button">Recommencer le questionnaire</button>
+  </div>
+</section>
+
+<script>
+  const DECKS = {"j1":{"titre":"Jour 1, Découverte","niveau":"Niveau Débutant","theme":"Prise en main de l'outil, connexion aux données et premiers rapports","questions":[["Quel composant de l'écosystème sert à concevoir un rapport ?",["Power BI Service","Power BI Desktop","Power BI Mobile","Power BI Report Server"],1],["Quelle extension porte un fichier de travail Power BI ?",[".pbit",".pbix",".pbids",".pbi"],1],["En mode Importer, où sont stockées les données après le chargement ?",["Elles restent dans la source","Dans le modèle Power BI, en mémoire compressée","Sur le serveur Power BI Service uniquement","Dans un fichier Excel temporaire"],1],["Quel mode de connexion privilégier par défaut ?",["DirectQuery","Connexion dynamique","Importer","Mode composite"],2],["Combien de vues principales propose Power BI Desktop ?",["Deux : Rapport et Modèle","Trois : Rapport, Table et Modèle","Quatre : Rapport, Table, Modèle et Requête","Une seule vue"],1],["Que se passe-t-il, par défaut, lorsqu'on clique sur une barre d'un histogramme ?",["Rien","Le visuel est supprimé","Les autres visuels de la page sont filtrés","Le rapport est actualisé"],2],["Quelle portée de filtre s'applique à l'ensemble du rapport ?",["Filtres sur ce visuel","Filtres sur cette page","Filtres sur toutes les pages","Segment"],2],["Quel visuel est le plus adapté pour comparer les cotisations de dix agences ?",["Un camembert","Un histogramme trié par ordre décroissant","Une carte avec une valeur unique","Un nuage de points"],1],["À quoi sert le fichier JSON dans Affichage → Thèmes ?",["À stocker les données du rapport","À définir la palette de couleurs et la typographie du rapport","À planifier l'actualisation","À gérer les droits d'accès"],1],["Quelle agrégation compte le nombre d'agences différentes présentes dans les données ?",["Somme","Nombre (Count)","Nombre de valeurs distinctes","Moyenne"],2],["Que faut-il faire si le fichier Excel source est renommé après la création du rapport ?",["Rien, Power BI le retrouve seul","Recréer le rapport entièrement","Mettre à jour le chemin dans les paramètres de la source de données","Republier le rapport"],2],["Quelle affirmation sur les licences est exacte ?",["La licence gratuite permet de partager des rapports avec ses collègues","Il faut une licence Pro pour publier et partager en espace collaboratif","Power BI Desktop est payant","Seuls les lecteurs ont besoin d'une licence"],1]]},"j2":{"titre":"Jour 2, Power Query","niveau":"Niveau Simple","theme":"Nettoyer, transformer et combiner des sources de données","questions":[["Que signifie le sigle ETL ?",["Extract, Transfer, Load","Extract, Transform, Load","Export, Transform, Link","Extract, Table, Layout"],1],["Que contient réellement une requête Power Query ?",["Une copie des données nettoyées","La suite d'instructions qui produit le résultat","Un lien vers un fichier Excel corrigé","Une sauvegarde de la source"],1],["Quel est le langage de Power Query ?",["Le DAX","Le M","Le SQL","Le VBA"],1],["Que signifie une colonne de type « Quelconque » (Any) ?",["Elle accepte tous les formats, c'est optimal","Le type n'est pas déterminé, il faut le corriger","Elle est vide","Elle est calculée"],1],["Quelle opération transforme des colonnes de mois en lignes ?",["Colonne de pivot","Supprimer le pivot des autres colonnes","Fractionner la colonne","Transposer"],1],["Vous devez réunir trois fichiers CSV de même structure. Quelle opération ?",["Fusionner (Merge)","Ajouter (Append)","Pivoter","Fractionner"],1],["Quelle jointure permet d'identifier les codes agence sans correspondance dans le référentiel ?",["Externe gauche","Interne","Anti gauche","Externe complet"],2],["Pourquoi filtrer les lignes le plus tôt possible ?",["Pour rendre le code plus lisible","Pour que les étapes suivantes traitent moins de données","C'est obligatoire","Pour activer le pliage de requête"],1],["Que signifie « désactiver le chargement » d'une requête ?",["Elle est supprimée","Elle reste utilisable dans Power Query mais n'alimente pas le modèle","Elle n'est plus actualisée","Elle devient en lecture seule"],1],["Où voir le code M complet d'une requête ?",["Dans la barre de formule","Dans l'Éditeur avancé","Dans la vue Modèle","Dans les paramètres de la source"],1],["Après une fusion, le nombre de lignes a augmenté. Pourquoi ?",["C'est normal","La clé n'est pas unique dans la table de droite","Le type de jointure est incorrect","La source a changé"],1],["Quel est l'intérêt de se connecter à un dossier plutôt qu'à des fichiers ?",["C'est plus rapide","Les nouveaux fichiers déposés sont intégrés automatiquement","Cela réduit la taille du .pbix","Cela active DirectQuery"],1]]},"j3":{"titre":"Jour 3, Modélisation & DAX","niveau":"Niveau Avancé","theme":"Modéliser, écrire des mesures DAX et publier sur le service","questions":[["Dans un schéma en étoile, que contient une table de faits ?",["Les libellés descriptifs","Les événements mesurables et les clés","Les paramètres du rapport","Les utilisateurs"],1],["Quelle cardinalité est la norme entre une dimension et une table de faits ?",["Un-à-un","Un-à-plusieurs","Plusieurs-à-plusieurs","Aucune"],1],["Pourquoi éviter le filtrage bidirectionnel ?",["Il est payant","Il crée des chemins de filtrage ambigus","Il ralentit l'actualisation","Il empêche la publication"],1],["Pourquoi une table de dates dédiée est-elle indispensable ?",["Pour gagner de la place","Elle est continue et débloque la time intelligence","Pour trier les colonnes","Ce n'est pas indispensable"],1],["Quelle est la différence entre une colonne calculée et une mesure ?",["Aucune","La colonne se calcule à l'actualisation, la mesure à l'affichage","La mesure est plus rapide à écrire","La colonne accepte le DAX, pas la mesure"],1],["Vous voulez utiliser une valeur comme axe d'un graphique. Quel objet créer ?",["Une mesure","Une colonne calculée","Un segment","Un paramètre"],1],["Quel est le rôle de CALCULATE ?",["Additionner une colonne","Évaluer une expression en modifiant le contexte de filtre","Créer une table","Trier les résultats"],1],["Pourquoi préférer DIVIDE à l'opérateur / ?",["C'est plus rapide","DIVIDE gère la division par zéro sans erreur","L'opérateur / n'existe pas en DAX","DIVIDE arrondit automatiquement"],1],["Que fait ALL ( D_Agence ) à l'intérieur d'un CALCULATE ?",["Sélectionne toutes les agences dans un segment","Supprime les filtres appliqués sur la table D_Agence","Trie les agences","Crée une nouvelle table"],1],["Que crée la publication d'un fichier .pbix dans le service ?",["Uniquement un rapport","Un modèle sémantique et un rapport","Un tableau de bord","Une application"],1],["Dans quel cas une passerelle de données est-elle nécessaire ?",["Toujours","Jamais","Quand la source est locale à l'entreprise","Uniquement avec DirectQuery"],2],["À qui la sécurité au niveau des lignes (RLS) ne s'applique-t-elle pas ?",["Aux visionneuses","Aux membres ayant les droits d'édition sur l'espace de travail","Aux utilisateurs externes","À personne"],1]]}};
+  const letters = ["A","B","C","D"];
+
+  const landing   = document.getElementById("landing");
+  const quizView  = document.getElementById("quiz-view");
+  const quizTitle = document.getElementById("quiz-title");
+  const quizContainer = document.getElementById("quiz");
+  const scoreElement = document.getElementById("score");
+  const answeredCountElement = document.getElementById("answered-count");
+
+  let questions = [];
+  let score = 0;
+  let answeredCount = 0;
+
+  // -------- Landing : cartes de choix --------
+  const dayGrid = document.getElementById("day-grid");
+  Object.keys(DECKS).forEach(function(key,i){
+    const d = DECKS[key];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "day-card";
+    btn.innerHTML =
+      '<span class="day-badge">'+(i+1)+'</span>'
+      + '<h2>'+d.titre+'</h2>'
+      + '<p class="day-level">'+d.niveau+'</p>'
+      + '<p class="day-theme">'+d.theme+'</p>'
+      + '<span class="day-go">Commencer le quizz →</span>';
+    btn.addEventListener("click",function(){ location.hash = key; });
+    dayGrid.appendChild(btn);
+  });
+
+  // -------- Routage par hash (compatible GitHub Pages) --------
+  function router(){
+    const key = location.hash.replace("#","");
+    if(DECKS[key]){ showQuiz(key); }
+    else{ showLanding(); }
+  }
+  window.addEventListener("hashchange", router);
+  window.addEventListener("load", router);
+
+  function showLanding(){
+    quizView.classList.add("hidden");
+    landing.classList.remove("hidden");
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById("back-button").addEventListener("click",function(){ location.hash = ""; });
+  document.getElementById("reset-quiz").addEventListener("click",function(){
+    const key = location.hash.replace("#","");
+    if(DECKS[key]) buildQuiz(key);
+  });
+
+  // -------- Affichage d'un quizz --------
+  function showQuiz(key){
+    landing.classList.add("hidden");
+    quizView.classList.remove("hidden");
+    buildQuiz(key);
+    window.scrollTo(0,0);
+  }
+
+  function buildQuiz(key){
+    const deck = DECKS[key];
+    questions = deck.questions.map(function(q){
+      return { question:q[0], options:q[1], correctAnswer:q[2] };
+    });
+    quizTitle.textContent = "Questionnaire, " + deck.titre;
+    score = 0; answeredCount = 0;
+    scoreElement.textContent = "0";
+    answeredCountElement.textContent = "0";
+    const sc = document.querySelector(".score-container");
+    sc.innerHTML = 'Score : <span id="score">0</span> bonne réponse sur <span id="answered-count">0</span> question vérifiée';
+    // recapture des spans recréés
+    quizContainer.innerHTML = "";
+
+    questions.forEach(function(item, questionIndex){
+      const questionNumber = questionIndex + 1;
+      const card = document.createElement("article");
+      card.className = "card";
+      card.id = "card-" + questionNumber;
+
+      const optionsHTML = item.options.map(function(option, optionIndex){
+        const letter = letters[optionIndex];
+        return '<label class="proposition">'
+          + '<input type="radio" name="q'+key+'-'+questionNumber+'" value="'+optionIndex+'">'
+          + '<span class="proposition-text"><span class="proposition-letter">'+letter+'.</span> '+option+'</span>'
+          + '</label>';
+      }).join("");
+
+      card.innerHTML =
+        '<div class="question-number">Question '+questionNumber+'</div>'
+        + '<h2 id="qt-'+questionNumber+'" class="question">'+item.question+'</h2>'
+        + '<fieldset class="propositions" aria-labelledby="qt-'+questionNumber+'">'+optionsHTML+'</fieldset>'
+        + '<p class="scratch-instruction">Sélectionnez une réponse, puis grattez pour vérifier.</p>'
+        + '<div class="scratch-container">'
+        +   '<div id="result-'+questionNumber+'" class="result" aria-hidden="true">'
+        +     '<div class="result-title">Réponse en attente</div><div class="result-answer"></div>'
+        +   '</div>'
+        +   '<canvas id="scratch-'+questionNumber+'" tabindex="0" role="button" '
+        +     'aria-label="Zone à gratter pour vérifier la réponse à la question '+questionNumber+'" aria-describedby="qt-'+questionNumber+'"></canvas>'
+        + '</div>'
+        + '<p id="status-'+questionNumber+'" class="status" aria-live="polite"></p>';
+
+      quizContainer.appendChild(card);
+      initScratch("scratch-"+questionNumber, questionIndex);
+    });
+  }
+
+  function updateScore(){
+    document.getElementById("score").textContent = score;
+    document.getElementById("answered-count").textContent = answeredCount;
+    if(answeredCount === questions.length){
+      const sc = document.querySelector(".score-container");
+      if(score >= 8){
+        sc.innerHTML = "🎉 Questionnaire terminé : "+score+" bonnes réponses sur "+questions.length+". Seuil de réussite atteint !";
+      }else{
+        sc.innerHTML = "📘 Questionnaire terminé : "+score+" bonnes réponses sur "+questions.length+". Le seuil conseillé est de 8 sur 12.";
+      }
+    }
+  }
+
+  // -------- Mécanisme « à gratter » (repris du quizz d'origine) --------
+  function initScratch(canvasId, questionIndex){
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const context = canvas.getContext("2d",{willReadFrequently:true});
+    const card = canvas.closest(".card");
+    const result = card.querySelector(".result");
+    const resultTitle = card.querySelector(".result-title");
+    const resultAnswer = card.querySelector(".result-answer");
+    const status = card.querySelector(".status");
+    const radioButtons = card.querySelectorAll('input[type="radio"]');
+    const question = questions[questionIndex];
+
+    let isDrawing=false, isRevealed=false, answerPrepared=false, selectedAnswer=null, lastX=0, lastY=0;
+    const brushSize=52, revealThreshold=0.6;
+
+    function drawScratchLayer(){
+      if(isRevealed) return;
+      const r = canvas.getBoundingClientRect();
+      const pr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(r.width*pr);
+      canvas.height = Math.round(r.height*pr);
+      context.setTransform(pr,0,0,pr,0,0);
+      context.globalCompositeOperation = "source-over";
+      const g = context.createLinearGradient(0,0,r.width,r.height);
+      g.addColorStop(0,"#dddddd"); g.addColorStop(0.5,"#b7b7b7"); g.addColorStop(1,"#8d8d8d");
+      context.fillStyle=g; context.fillRect(0,0,r.width,r.height);
+      context.fillStyle="rgba(255,255,255,0.25)";
+      for(let x=10;x<r.width;x+=20){for(let y=10;y<r.height;y+=20){context.beginPath();context.arc(x,y,2,0,Math.PI*2);context.fill();}}
+      context.fillStyle="#333333"; context.font="bold 16px Arial"; context.textAlign="center"; context.textBaseline="middle";
+      context.fillText("Grattez pour vérifier", r.width/2, r.height/2 - 10);
+      context.font="13px Arial";
+      context.fillText("Choisissez d'abord une proposition", r.width/2, r.height/2 + 16);
+    }
+    function getSelectedAnswer(){
+      const c = card.querySelector('input[type="radio"]:checked');
+      return c ? Number(c.value) : null;
+    }
+    function prepareResult(){
+      if(answerPrepared) return true;
+      selectedAnswer = getSelectedAnswer();
+      if(selectedAnswer === null){
+        status.textContent = "Veuillez d'abord sélectionner une proposition.";
+        status.className = "status warning";
+        card.querySelector(".propositions").scrollIntoView({behavior:"smooth",block:"nearest"});
+        return false;
+      }
+      answerPrepared = true;
+      radioButtons.forEach(function(radio){ radio.disabled = true; });
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      const correctLetter = letters[question.correctAnswer];
+      const correctText = question.options[question.correctAnswer];
+      const selectedLetter = letters[selectedAnswer];
+      const selectedText = question.options[selectedAnswer];
+      result.setAttribute("aria-hidden","false");
+      if(isCorrect){
+        result.classList.add("correct");
+        resultTitle.textContent = "✅ Bonne réponse !";
+        resultAnswer.textContent = correctLetter+". "+correctText;
+      }else{
+        result.classList.add("incorrect");
+        resultTitle.textContent = "❌ Réponse incorrecte";
+        resultAnswer.textContent = "Vous avez choisi "+selectedLetter+". "+selectedText+". La bonne réponse est "+correctLetter+". "+correctText+".";
+      }
+      status.textContent = "Réponse verrouillée. Grattez pour découvrir le résultat.";
+      status.className = "status";
+      return true;
+    }
+    function getPointerPosition(e){
+      const r = canvas.getBoundingClientRect();
+      return {x:e.clientX-r.left, y:e.clientY-r.top};
+    }
+    function eraseCircle(x,y){
+      context.globalCompositeOperation="destination-out";
+      context.beginPath(); context.arc(x,y,brushSize/2,0,Math.PI*2); context.fill();
+    }
+    function startScratch(e){
+      if(isRevealed) return;
+      e.preventDefault();
+      if(!prepareResult()) return;
+      isDrawing = true;
+      const p = getPointerPosition(e); lastX=p.x; lastY=p.y;
+      if(e.pointerId!==undefined && canvas.setPointerCapture){ canvas.setPointerCapture(e.pointerId); }
+      eraseCircle(p.x,p.y);
+    }
+    function drawScratch(e){
+      if(!isDrawing||isRevealed||!answerPrepared) return;
+      e.preventDefault();
+      const p = getPointerPosition(e);
+      context.globalCompositeOperation="destination-out";
+      context.beginPath(); context.moveTo(lastX,lastY); context.lineTo(p.x,p.y);
+      context.lineWidth=brushSize; context.lineCap="round"; context.lineJoin="round"; context.stroke();
+      lastX=p.x; lastY=p.y;
+    }
+    function stopScratch(e){
+      if(!isDrawing||isRevealed) return;
+      isDrawing=false;
+      if(e.pointerId!==undefined && canvas.hasPointerCapture && canvas.hasPointerCapture(e.pointerId)){ canvas.releasePointerCapture(e.pointerId); }
+      checkScratchedArea();
+    }
+    function checkScratchedArea(){
+      const imageData = context.getImageData(0,0,canvas.width,canvas.height);
+      const pixels = imageData.data;
+      let transparent = 0;
+      const total = canvas.width*canvas.height;
+      for(let i=3;i<pixels.length;i+=4){ if(pixels[i]<128) transparent++; }
+      const pct = transparent/total;
+      if(pct >= revealThreshold){ revealResult(); }
+      else{ status.textContent = Math.round(pct*100)+" % gratté. Continuez jusqu'à 60 %."; status.className="status"; }
+    }
+    function revealResult(){
+      if(isRevealed||!answerPrepared) return;
+      isRevealed=true; isDrawing=false;
+      canvas.style.opacity="0";
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      answeredCount++;
+      if(isCorrect){ score++; card.classList.add("correct-card"); status.textContent="Bravo, votre réponse est correcte !"; status.className="status success"; }
+      else{ card.classList.add("incorrect-card"); status.textContent="Votre réponse est incorrecte."; status.className="status error"; }
+      updateScore();
+      setTimeout(function(){ canvas.style.display="none"; },600);
+    }
+    function handleKeyboard(e){
+      if(e.key!=="Enter" && e.key!==" ") return;
+      e.preventDefault();
+      if(!prepareResult()) return;
+      context.clearRect(0,0,canvas.width,canvas.height);
+      revealResult();
+    }
+    canvas.addEventListener("pointerdown",startScratch);
+    canvas.addEventListener("pointermove",drawScratch);
+    canvas.addEventListener("pointerup",stopScratch);
+    canvas.addEventListener("pointercancel",stopScratch);
+    canvas.addEventListener("lostpointercapture",function(){ if(isDrawing){ isDrawing=false; checkScratchedArea(); } });
+    canvas.addEventListener("keydown",handleKeyboard);
+    radioButtons.forEach(function(radio){
+      radio.addEventListener("change",function(){
+        if(!answerPrepared){ status.textContent="Réponse sélectionnée. Vous pouvez maintenant gratter."; status.className="status success"; }
+      });
+    });
+    drawScratchLayer();
+    let resizeTimer;
+    window.addEventListener("resize",function(){
+      if(isRevealed||answerPrepared) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(drawScratchLayer,150);
+    });
+  }
+</script>
+</body>
+</html>
