@@ -215,6 +215,56 @@
   @media(prefers-reduced-motion:reduce){
     canvas,.proposition,.day-card{transition:none;}
   }
+
+  /* ============ ÉCRAN DE SAISIE DU NOM ============ */
+  #name-view{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:40px 18px;
+    background:linear-gradient(135deg, rgba(31,56,100,0.96) 0%, rgba(46,83,149,0.92) 50%, rgba(233,83,14,0.88) 100%), #1F3864;
+  }
+  .name-wrap{width:100%;max-width:440px;}
+  .name-card{
+    background:#fff;border-radius:18px;padding:34px 30px 28px;text-align:center;
+    box-shadow:0 18px 48px rgba(0,0,0,0.30);
+  }
+  .name-badge{width:74px;height:74px;margin:0 auto 16px;border-radius:15px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.18);}
+  .name-badge img{width:100%;height:100%;object-fit:cover;display:block;}
+  .name-kicker{margin:0 0 6px;color:var(--msc-orange-dark);font-size:0.8rem;font-weight:bold;letter-spacing:2px;text-transform:uppercase;}
+  #name-title{margin:0 0 10px;color:var(--navy);font-size:1.5rem;}
+  .name-help{margin:0 0 20px;color:var(--secondary-text);font-size:0.95rem;line-height:1.5;}
+  .name-label{display:block;text-align:left;margin:0 0 6px;font-size:0.82rem;font-weight:bold;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;}
+  #participant-input{
+    width:100%;padding:13px 15px;font-family:inherit;font-size:1.05rem;
+    border:2px solid var(--border-color);border-radius:10px;color:var(--text-color);
+  }
+  #participant-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(46,83,149,0.18);}
+  .name-error{min-height:20px;margin:8px 0 0;color:var(--error);font-size:0.85rem;font-weight:bold;text-align:left;}
+  .name-actions{display:flex;gap:12px;margin-top:14px;}
+  .name-back{
+    flex:0 0 auto;padding:13px 18px;border:2px solid var(--border-color);border-radius:10px;
+    background:#fff;color:var(--secondary-text);font-family:inherit;font-size:0.95rem;font-weight:bold;cursor:pointer;
+  }
+  .name-back:hover{background:#f2f4f7;}
+  .name-start{
+    flex:1;padding:13px 18px;border:0;border-radius:10px;
+    background:var(--navy);color:#fff;font-family:inherit;font-size:1rem;font-weight:bold;cursor:pointer;
+  }
+  .name-start:hover{background:var(--msc-orange);}
+  .name-start:focus-visible,.name-back:focus-visible{outline:3px solid var(--power-bi-yellow);outline-offset:2px;}
+
+  /* ============ BANDEAU DE COLLECTE (fin de quizz) ============ */
+  .send-box{
+    max-width:900px;margin:26px auto 0;padding:18px 20px;border-radius:12px;
+    background:#eef2fb;border:1px solid #cdd8ee;text-align:center;
+  }
+  .send-box.ok{background:var(--success-background);border-color:var(--success);}
+  .send-box.err{background:var(--error-background);border-color:var(--error);}
+  .send-box p{margin:0 0 10px;font-size:0.98rem;color:var(--text-color);font-weight:bold;}
+  .send-box .send-retry{
+    padding:10px 20px;border:0;border-radius:8px;background:var(--navy);color:#fff;
+    font-family:inherit;font-size:0.95rem;font-weight:bold;cursor:pointer;
+  }
+  .send-box .send-retry:hover{background:var(--msc-orange);}
 </style>
 </head>
 <body>
@@ -231,6 +281,25 @@
     <div class="day-grid" id="day-grid"></div>
   </div>
   <p class="landing-foot">Sélectionnez une journée pour commencer · Chaque quizz comporte 12 questions · Seuil de réussite : 8 / 12</p>
+</section>
+
+<!-- ================= SAISIE DU NOM ================= -->
+<section id="name-view" class="hidden">
+  <div class="name-wrap">
+    <div class="name-card">
+      <div class="name-badge"><img src="data:image/jpeg;base64,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" alt="Saint-Christophe"></div>
+      <p class="name-kicker" id="name-kicker">Formation Power BI</p>
+      <h2 id="name-title">Avant de commencer</h2>
+      <p class="name-help">Saisissez votre prénom et votre nom. Ils permettront au formateur de suivre vos réponses.</p>
+      <label for="participant-input" class="name-label">Prénom et nom</label>
+      <input id="participant-input" type="text" autocomplete="name" placeholder="Ex. Camille MARTIN" maxlength="60">
+      <p id="name-error" class="name-error"></p>
+      <div class="name-actions">
+        <button type="button" class="name-back" id="name-back">← Retour</button>
+        <button type="button" class="name-start" id="name-start">Commencer le quizz →</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ================= QUIZ ================= -->
@@ -276,9 +345,20 @@
   const scoreElement = document.getElementById("score");
   const answeredCountElement = document.getElementById("answered-count");
 
+  // ================================================================
+  // COLLECTE DES RÉSULTATS (Google Sheets)
+  // Collez ci-dessous l'URL de votre script Google (voir mode d'emploi).
+  // Tant qu'elle vaut "", le quizz fonctionne normalement sans rien envoyer.
+  // ================================================================
+  const COLLECTE_URL = "https://script.google.com/macros/s/AKfycbykpY0iynGkzyZrSQrIlwX5U0G1pRguold4HpAiLXKaIT-dQP8h1a3MklbqoNlOQWieUw/exec";
+
   let questions = [];
   let score = 0;
   let answeredCount = 0;
+  let currentKey = "";        // jour en cours (j1/j2/j3)
+  let participant = "";       // nom saisi au départ
+  let reponses = [];          // détail : {n, question, choix, correct, ok}
+  let dejaEnvoye = false;     // évite les envois multiples
 
   // -------- Landing : cartes de choix --------
   const dayGrid = document.getElementById("day-grid");
@@ -297,30 +377,71 @@
     dayGrid.appendChild(btn);
   });
 
+  const nameView = document.getElementById("name-view");
+  const nameInput = document.getElementById("participant-input");
+  const nameError = document.getElementById("name-error");
+  const nameKicker = document.getElementById("name-kicker");
+
   // -------- Routage par hash (compatible GitHub Pages) --------
   function router(){
     const key = location.hash.replace("#","");
-    if(DECKS[key]){ showQuiz(key); }
+    if(DECKS[key]){
+      // si le nom est déjà connu (participant qui enchaîne les jours) -> quizz direct
+      if(participant){ showQuiz(key); }
+      else{ showNamePrompt(key); }
+    }
     else{ showLanding(); }
   }
   window.addEventListener("hashchange", router);
   window.addEventListener("load", router);
 
-  function showLanding(){
+  function hideAll(){
+    landing.classList.add("hidden");
+    nameView.classList.add("hidden");
     quizView.classList.add("hidden");
+  }
+
+  function showLanding(){
+    hideAll();
     landing.classList.remove("hidden");
     window.scrollTo(0,0);
   }
 
+  // -------- Écran de saisie du nom --------
+  function showNamePrompt(key){
+    hideAll();
+    currentKey = key;
+    nameKicker.textContent = DECKS[key].titre;
+    nameError.textContent = "";
+    nameView.classList.remove("hidden");
+    window.scrollTo(0,0);
+    setTimeout(function(){ nameInput.focus(); }, 100);
+  }
+
+  function validerNom(){
+    const val = nameInput.value.trim().replace(/\s+/g," ");
+    if(val.length < 3){
+      nameError.textContent = "Merci de saisir votre prénom et votre nom.";
+      nameInput.focus();
+      return;
+    }
+    participant = val;
+    showQuiz(currentKey);
+  }
+
+  document.getElementById("name-start").addEventListener("click", validerNom);
+  document.getElementById("name-back").addEventListener("click", function(){ location.hash = ""; });
+  nameInput.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); validerNom(); } });
+
   document.getElementById("back-button").addEventListener("click",function(){ location.hash = ""; });
   document.getElementById("reset-quiz").addEventListener("click",function(){
-    const key = location.hash.replace("#","");
-    if(DECKS[key]) buildQuiz(key);
+    if(DECKS[currentKey]) buildQuiz(currentKey);
   });
 
   // -------- Affichage d'un quizz --------
   function showQuiz(key){
-    landing.classList.add("hidden");
+    hideAll();
+    currentKey = key;
     quizView.classList.remove("hidden");
     buildQuiz(key);
     window.scrollTo(0,0);
@@ -333,12 +454,17 @@
     });
     quizTitle.textContent = "Questionnaire, " + deck.titre;
     score = 0; answeredCount = 0;
+    reponses = [];
+    dejaEnvoye = false;
     scoreElement.textContent = "0";
     answeredCountElement.textContent = "0";
     const sc = document.querySelector(".score-container");
     sc.innerHTML = 'Score : <span id="score">0</span> bonne réponse sur <span id="answered-count">0</span> question vérifiée';
     // recapture des spans recréés
     quizContainer.innerHTML = "";
+    // retirer un éventuel bandeau d'envoi d'une session précédente
+    const oldBox = document.getElementById("send-box");
+    if(oldBox) oldBox.remove();
 
     questions.forEach(function(item, questionIndex){
       const questionNumber = questionIndex + 1;
@@ -383,7 +509,60 @@
       }else{
         sc.innerHTML = "📘 Questionnaire terminé : "+score+" bonnes réponses sur "+questions.length+". Le seuil conseillé est de 8 sur 12.";
       }
+      // envoi unique des résultats au formateur
+      envoyerResultats();
     }
+  }
+
+  // -------- Envoi des résultats vers Google Sheets --------
+  function construireBandeau(){
+    let box = document.getElementById("send-box");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "send-box";
+      box.className = "send-box";
+      const reset = document.querySelector(".reset-container");
+      reset.parentNode.insertBefore(box, reset);
+    }
+    return box;
+  }
+
+  function envoyerResultats(){
+    if(dejaEnvoye) return;
+    if(!COLLECTE_URL){ return; }        // collecte non configurée : on ne fait rien
+    dejaEnvoye = true;
+
+    const box = construireBandeau();
+    box.className = "send-box";
+    box.innerHTML = "<p>Envoi de vos réponses au formateur…</p>";
+
+    const payload = {
+      participant: participant,
+      jour: DECKS[currentKey] ? DECKS[currentKey].titre : currentKey,
+      jourCle: currentKey,
+      score: score,
+      total: questions.length,
+      horodatage: new Date().toISOString(),
+      reponses: reponses
+    };
+
+    fetch(COLLECTE_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).then(function(){
+      // en mode no-cors la réponse est opaque : on considère l'envoi parti
+      box.className = "send-box ok";
+      box.innerHTML = "<p>✅ Vos réponses ont bien été transmises au formateur. Merci "+participant+" !</p>";
+    }).catch(function(){
+      box.className = "send-box err";
+      box.innerHTML = "<p>⚠️ L'envoi a échoué (connexion ?). Vous pouvez réessayer.</p>";
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "send-retry"; btn.textContent = "Renvoyer mes réponses";
+      btn.addEventListener("click", function(){ dejaEnvoye = false; envoyerResultats(); });
+      box.appendChild(btn);
+    });
   }
 
   // -------- Mécanisme « à gratter » (repris du quizz d'origine) --------
@@ -502,6 +681,14 @@
       canvas.style.opacity="0";
       const isCorrect = selectedAnswer === question.correctAnswer;
       answeredCount++;
+      // journaliser la réponse pour l'envoi de fin de quizz
+      reponses[questionIndex] = {
+        n: questionIndex + 1,
+        question: question.question,
+        choix: letters[selectedAnswer] + ". " + question.options[selectedAnswer],
+        correct: letters[question.correctAnswer] + ". " + question.options[question.correctAnswer],
+        ok: isCorrect ? "Oui" : "Non"
+      };
       if(isCorrect){ score++; card.classList.add("correct-card"); status.textContent="Bravo, votre réponse est correcte !"; status.className="status success"; }
       else{ card.classList.add("incorrect-card"); status.textContent="Votre réponse est incorrecte."; status.className="status error"; }
       updateScore();
